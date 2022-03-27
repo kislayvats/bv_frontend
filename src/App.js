@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import axios from "axios";
+import "./App.css";
 
 function App() {
+  const [value, setValue] = useState("");
+
+  const firstCallToBackend = async () => {
+    await axios
+      .get("http://localhost:8000/greetings")
+      .then((res) => {
+        setValue(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const callUser = async () => {
+    await axios
+      .get(`http://localhost:5050/api/user/Jyoti`)
+      .then((res) => {
+        console.log("BACKEND_RESPONSE==>>", res.data);
+        setValue(res.data.message);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">Hello world</div>
+      {value}
+      <button onClick={callUser}> Call Backend</button>
+    </>
   );
 }
 
